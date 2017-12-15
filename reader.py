@@ -43,7 +43,7 @@ def get_latest_books():
         for book in books:
             print(book.firstChild.nodeValue)
     else:
-        print("Error, server replied with " + data.status_code)
+        print("Error, server replied with", data.status_code)
 
 
 def get_popular_books():
@@ -58,7 +58,7 @@ def get_popular_books():
         for book in books:
             print(book.firstChild.nodeValue)
     else:
-        print("Error, server replied with " + data.status_code)
+        print("Error, server replied with", data.status_code)
 
 
 def get_book_categories():
@@ -73,7 +73,7 @@ def get_book_categories():
         for book in books:
             print(book.firstChild.nodeValue)
     else:
-        print("Error, server replied with " + data.status_code)
+        print("Error, server replied with", data.status_code)
 
 
 def search_book():
@@ -89,7 +89,7 @@ def search_book():
         for book in books:
             print(book.firstChild.nodeValue)
     else:
-        print("Error, server replied with " + data.status_code)
+        print("Error, server replied with", data.status_code)
 
 
 def login():
