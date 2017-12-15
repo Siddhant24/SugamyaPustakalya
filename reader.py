@@ -33,37 +33,64 @@ def get_user_choice():
     
 def get_latest_books():
     # Get latest books from Sugamya Pustakalya
-    data = requests.get(URL + "latest/page/1/limit/20/format/JSON?API_key=" + KEY, verify=False) # during production remove verify = false
-    parsedData = minidom.parseString(data.text);
-    books = parsedData.getElementsByTagName('title')
-    for book in books:
-        print(book.firstChild.nodeValue)
+    try:
+        data = requests.get(URL + "latest/page/1/limit/20/format/JSON?API_key=" + KEY, verify=False) # during production remove verify = false
+    except Exception as e:
+        print(e);
+    if(data.status_code == 200):       
+        parsedData = minidom.parseString(data.text);
+        books = parsedData.getElementsByTagName('title')
+        for book in books:
+            print(book.firstChild.nodeValue)
+    else:
+        print("Error, server replied with " + data.status_code)
 
 
 def get_popular_books():
     # Get popular books from Sugamya Pustakalya
-    data = requests.get(URL + "popularbooks/noOfTimesDelivered/1/startDate/2017-01-01/endDate/2017-12-15/page/1/limit/17/format/xml?API_key=" + KEY, verify=False) # during production remove verify = false
-    parsedData = minidom.parseString(data.text);
-    books = parsedData.getElementsByTagName('title')
-    for book in books:
-        print(book.firstChild.nodeValue)
+    try:
+        data = requests.get(URL + "popularbooks/noOfTimesDelivered/1/startDate/2017-01-01/endDate/2017-12-15/page/1/limit/17/format/xml?API_key=" + KEY, verify=False) # during production remove verify = false
+    except Exception as e:
+        print(e)
+    if(data.status_code == 200):       
+        parsedData = minidom.parseString(data.text);
+        books = parsedData.getElementsByTagName('title')
+        for book in books:
+            print(book.firstChild.nodeValue)
+    else:
+        print("Error, server replied with " + data.status_code)
+
 
 def get_book_categories():
     # Get popular books from Sugamya Pustakalya
-    data = requests.get(URL + "categorylist/page/1/limit/52/format/xml?API_key=" + KEY, verify=False) # during production remove verify = false
-    parsedData = minidom.parseString(data.text);
-    books = parsedData.getElementsByTagName('title')
-    for book in books:
-        print(book.firstChild.nodeValue)
+    try:
+        data = requests.get(URL + "categorylist/page/1/limit/52/format/xml?API_key=" + KEY, verify=False) # during production remove verify = false
+    except Exception as e:
+        print(e)
+    if(data.status_code == 200):       
+        parsedData = minidom.parseString(data.text);
+        books = parsedData.getElementsByTagName('title')
+        for book in books:
+            print(book.firstChild.nodeValue)
+    else:
+        print("Error, server replied with " + data.status_code)
+
 
 def search_book():
     # Search books by Title/Author from user given user input
     search = input("Enter book Title/Author: ")
-    data = requests.get(URL + "authortitle/" + search + "/page/1/limit/25/format/xml?API_key=" + KEY, verify=False) # during production remove verify = false
-    parsedData = minidom.parseString(data.text);
-    books = parsedData.getElementsByTagName('title')
-    for book in books:
-        print(book.firstChild.nodeValue)
+    try:
+        data = requests.get(URL + "authortitle/" + search + "/page/1/limit/25/format/xml?API_key=" + KEY, verify=False) # during production remove verify = false
+    except Exception as e:
+        print(e)
+    if(data.status_code == 200):       
+        parsedData = minidom.parseString(data.text);
+        books = parsedData.getElementsByTagName('title')
+        for book in books:
+            print(book.firstChild.nodeValue)
+    else:
+        print("Error, server replied with " + data.status_code)
+
 
 def login():
     USERID = input("User ID/ Email: ")
@@ -71,9 +98,10 @@ def login():
 
 ### MAIN PROGRAM ###
 
-# Set up a loop where users can choose what they'd like to do.
+# a loop where users can choose what they'd like to do.
 choice = ''
 display_title_bar()
+
 while choice != 'q':    
     
     choice = get_user_choice()
@@ -90,4 +118,4 @@ while choice != 'q':
     elif choice == 'q':
         print("\nThanks for using Reader. Bye.")
     else:
-        print("\nI didn't understand that choice.\n")
+        print("\nInvalid choice.\n")
