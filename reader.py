@@ -81,8 +81,11 @@ class SugamyaPustakalya():
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
             books = parsedData.getElementsByTagName('title')
-            for book in books:
-                print(book.firstChild.nodeValue)
+            if(len(books) == 0):
+                print("No books found")
+            else:
+                for book in books:
+                    print(book.firstChild.nodeValue)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -96,8 +99,11 @@ class SugamyaPustakalya():
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
             books = parsedData.getElementsByTagName('title')
-            for book in books:
-                print(book.firstChild.nodeValue)
+            if(len(books) == 0):
+                print("No books found")
+            else:
+                for book in books:
+                    print(book.firstChild.nodeValue)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -111,8 +117,11 @@ class SugamyaPustakalya():
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
             books = parsedData.getElementsByTagName('title')
-            for book in books:
-                print(book.firstChild.nodeValue)
+            if(len(books) == 0):
+                print("No books found")
+            else:
+                for book in books:
+                    print(book.firstChild.nodeValue)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -127,8 +136,11 @@ class SugamyaPustakalya():
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
             books = parsedData.getElementsByTagName('title')
-            for book in books:
-                print(book.firstChild.nodeValue)
+            if(len(books) == 0):
+                print("No books found")
+            else:
+                for book in books:
+                    print(book.firstChild.nodeValue)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -136,6 +148,17 @@ class SugamyaPustakalya():
     def login():
         USERID = input("User ID/ Email: ")
         PASSWORD = input("Password: ")
+
+
+class Bookshare():
+
+    KEY = 'xj4d2vektus5sdgqwtmq3tdc'
+
+
+    def __init__(self):
+        self.userid =''
+        self.password =''
+
 
 ### MAIN PROGRAM ###
 
