@@ -10,7 +10,7 @@ def display_title_bar():
         os.system('clear')
                   
         print("\t**********************************************")
-        print("\t***  Reader - A terminal app for accessing Sugamya Pustakalya!  ***")
+        print("\t***  Reader - A terminal app for searching and downloading books!  ***")
         print("\t**********************************************")
 
 def get_user_input():
@@ -67,7 +67,7 @@ class SugamyaPustakalya():
                 print("\nThanks for using Reader. Bye.")
                 sys.exit(0)
             elif choice == 'b':
-                print("\nGoing back")
+                print("\nHome")
             else:
                 print("\nInvalid choice.\n")
         
@@ -116,12 +116,12 @@ class SugamyaPustakalya():
             print(e)
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
-            books = parsedData.getElementsByTagName('title')
-            if(len(books) == 0):
+            categories = parsedData.getElementsByTagName('title')
+            if(len(categories) == 0):
                 print("No books found")
             else:
-                for book in books:
-                    print(book.firstChild.nodeValue)
+                for category in categories:
+                    print(category.firstChild.nodeValue)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -153,11 +153,125 @@ class SugamyaPustakalya():
 class Bookshare():
 
     KEY = 'xj4d2vektus5sdgqwtmq3tdc'
-
+    URL = 'https://api.bookshare.org/book/'
 
     def __init__(self):
         self.userid =''
         self.password =''
+
+    def get_user_choice(self):
+        # Let users know what they can do.
+        print("\n[1] Latest books")
+        print("[2] Popular books")
+        print("[3] Search Books")
+        print("[4] Book Categories")
+        print("[5] Login")
+        print("[b] Go Back")
+        print("[q] Quit")
+        
+        return input("What would you like to do? ") # change input to raw_input if using python 2.7
+
+    def process_user_choice(self):
+        choice = ''
+        display_title_bar()
+
+        while choice != 'b':    
+            # Respond to the user's choice.
+            choice = self.get_user_choice()
+            display_title_bar()
+            if choice == '1':
+                self.get_latest_books()
+            elif choice == '2':
+                self.get_popular_books()
+            elif choice == '3':
+                self.search_book()
+            elif choice == '4':
+                self.get_book_categories()
+            elif choice == 'q':
+                print("\nThanks for using Reader. Bye.")
+                sys.exit(0)
+            elif choice == 'b':
+                print("\nHome")
+            else:
+                print("\nInvalid choice.\n")
+        
+
+    def get_latest_books(self):
+        # Get latest books from Sugamya Pustakalya
+        try:
+            data = requests.get(self.URL + "latest/format/xml?api_key=" + self.KEY, verify=False) # during production remove verify = false
+        except Exception as e:
+            print(e);
+        if(data.status_code == 200):       
+            parsedData = minidom.parseString(data.text);
+            books = parsedData.getElementsByTagName('title')
+            if(len(books) == 0):
+                print("No books found")
+            else:
+                for book in books:
+                    print(book.firstChild.nodeValue)
+        else:
+            print("Error, server replied with", data.status_code)
+
+
+    def get_popular_books(self):
+        # Get popular books from Sugamya Pustakalya
+        try:
+            data = requests.get(self.URL + "popular/format/xml?api_key=" + self.KEY, verify=False) # during production remove verify = false
+        except Exception as e:
+            print(e)
+        if(data.status_code == 200):       
+            parsedData = minidom.parseString(data.text);
+            books = parsedData.getElementsByTagName('title')
+            if(len(books) == 0):
+                print("No books found")
+            else:
+                for book in books:
+                    print(book.firstChild.nodeValue)
+        else:
+            print("Error, server replied with", data.status_code)
+
+
+    def get_book_categories(self):
+        # Get popular books from Sugamya Pustakalya
+        try:
+            data = requests.get("https://api.bookshare.org/reference/category/list/format/xml?api_key=" + self.KEY, verify=False) # during production remove verify = false
+        except Exception as e:
+            print(e)
+        if(data.status_code == 200):       
+            parsedData = minidom.parseString(data.text);
+            categories = parsedData.getElementsByTagName('name')
+            if(len(categories) == 0):
+                print("No books found")
+            else:
+                for category in categories:
+                    print(category.firstChild.nodeValue)
+        else:
+            print("Error, server replied with", data.status_code)
+
+
+    def search_book(self):
+        # Search books by Title/Author from user given user input
+        search = input("Enter book Title/Author: ")
+        try:
+            data = requests.get(self.URL + "search/" + search + "/format/xml?api_key=" + self.KEY, verify=False)# during production remove verify = false
+        except Exception as e:
+            print(e)
+        if(data.status_code == 200):       
+            parsedData = minidom.parseString(data.text);
+            books = parsedData.getElementsByTagName('title')
+            if(len(books) == 0):
+                print("No books found")
+            else:
+                for book in books:
+                    print(book.firstChild.nodeValue)
+        else:
+            print("Error, server replied with", data.status_code)
+
+
+    def login():
+        USERID = input("User ID/ Email: ")
+        PASSWORD = input("Password: ")
 
 
 ### MAIN PROGRAM ###
@@ -172,10 +286,11 @@ while choice != 'q':
     # Respond to the user's choice.
     display_title_bar()
     if choice == '1':
-        sp = SugamyaPustakalya();
+        sp = SugamyaPustakalya()
         sp.process_user_choice()
     elif choice == '2':
-        get_popular_books()
+        bs = Bookshare()
+        bs.process_user_choice()
     elif choice == '3':
         search_book()
     elif choice == '4':
