@@ -197,7 +197,7 @@ class Bookshare():
         
 
     def get_latest_books(self):
-        # Get latest books from Sugamya Pustakalya
+        # Get latest books from bookshare.org
         try:
             data = requests.get(self.URL + "latest/format/xml?api_key=" + self.KEY, verify=False) # during production remove verify = false
         except Exception as e:
@@ -215,7 +215,7 @@ class Bookshare():
 
 
     def get_popular_books(self):
-        # Get popular books from Sugamya Pustakalya
+        # Get popular books from bookshare.org
         try:
             data = requests.get(self.URL + "popular/format/xml?api_key=" + self.KEY, verify=False) # during production remove verify = false
         except Exception as e:
@@ -233,7 +233,7 @@ class Bookshare():
 
 
     def get_book_categories(self):
-        # Get popular books from Sugamya Pustakalya
+        # Get popular books from bookshare.org
         try:
             data = requests.get("https://api.bookshare.org/reference/category/list/format/xml?api_key=" + self.KEY, verify=False) # during production remove verify = false
         except Exception as e:
