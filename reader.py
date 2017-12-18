@@ -155,6 +155,10 @@ class SugamyaPustakalya():
         PASSWORD = input("Password: ")
 
 
+
+
+### Class for BOOKSHARE  ###
+
 class Bookshare():
 
     KEY = 'xj4d2vektus5sdgqwtmq3tdc'
@@ -173,7 +177,8 @@ class Bookshare():
         print("[2] Popular books")
         print("[3] Search Books")
         print("[4] Book Categories")
-        print("[5] Login")
+        print("[5] Search and download book by ID")
+        print("[6] Login")
         print("[b] Go Back")
         print("[q] Quit")
         
@@ -195,6 +200,8 @@ class Bookshare():
                 self.search_book()
             elif choice == '4':
                 self.get_book_categories()
+            elif choice == '5':
+                self.get_book_id()
             elif choice == 'q':
                 print("\nThanks for using Reader. Bye.")
                 sys.exit(0)
@@ -216,11 +223,22 @@ class Bookshare():
             if(len(books) == 0):
                 print("No books found")
             else:
+                all_ids = []
                 t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
                     t.add_row([book.childNodes[1].firstChild.nodeValue, book.childNodes[5].firstChild.nodeValue, book.childNodes[3].firstChild.nodeValue])
+                    all_ids.append(book.childNodes[1].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
+                response = ''
+                while(response not in all_ids and response != 'b'):
+                    if(response != ''):
+                        print("\nInvalid choice, try again")
+                    print("\nEnter a book ID to search and download")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -232,7 +250,7 @@ class Bookshare():
         except Exception as e:
             print(e)
         if(data.status_code == 200):       
-            parsedData = minidom.parseString(data.text);
+            parsedData = minidom.parseString(data.text)
             books = parsedData.getElementsByTagName('result')
             if(len(books) == 0):
                 print("No books found")
@@ -272,8 +290,6 @@ class Bookshare():
                     response = input("\nResponse: ")
                 if(response != 'b'):
                     self.category_search(response)
-
-
         else:
             print("Error, server replied with", data.status_code)
 
@@ -320,10 +336,42 @@ class Bookshare():
         else:
             print("Error, server replied with", data.status_code)
 
+    def get_book_id(self, id):
+        # Search a particular book by ID
+        try:
+            data = requests.get(self.URL + "id/" + id + "/format/xml?api_key=" + self.KEY, verify=False)# during production remove verify = false
+        except Exception as e:
+            print(e)
+        if(data.status_code == 200):       
+            parsedData = minidom.parseString(data.text);
+            title = parsedData.getElementsByTagName('title')[0].firstChild.nodeValue
+            author = parsedData.getElementsByTagName('author')[0].firstChild.nodeValue
+            publisher = parsedData.getElementsByTagName('publisher')[0].firstChild.nodeValue
+            synopsis = parsedData.getElementsByTagName('brief-synopsis')[0].firstChild.nodeValue
+            print("\nTitle: " + title)
+            print("Author: " + author)
+            print("Publisher: " + publisher)
+            print("\nBrief Synopsis\n" + synopsis)
+
+            response = ''
+            while(response != 'd' and response != 'b'):
+                if(response != ''):
+                    print("\nInvalid choice")
+                print("\n[d] To download book")
+                print("[b] To go back")
+                response = input("Response: ")
+            if(response != 'b'):
+                self.book_download(id)
+        else:
+            print("Error, server replied with", data.status_code)
+   
 
     def login():
         USERID = input("User ID/ Email: ")
         PASSWORD = input("Password: ")
+
+
+
 
 
 ### MAIN PROGRAM ###
