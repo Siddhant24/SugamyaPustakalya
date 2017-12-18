@@ -234,6 +234,34 @@ class SugamyaPustakalya():
         else:
             print("Error, server replied with", data.status_code)
 
+    def get_book_id(self, id):
+        # Search a particular book by ID
+        try:
+            data = requests.get(self.URL + "id/" + id + "/page/1/limit/25/format/xml?API_key=" + self.KEY, verify=False)# during production remove verify = false
+        except Exception as e:
+            print(e)
+        if(data.status_code == 200):       
+            parsedData = minidom.parseString(data.text);
+            title = parsedData.getElementsByTagName('title')[0].firstChild.nodeValue
+            author = parsedData.getElementsByTagName('author')[0].firstChild.nodeValue
+            synopsis = parsedData.getElementsByTagName('brief-synopsis')[0]
+            print("\nTitle: " + title)
+            print("Author: " + author)
+            if(len(synopsis.childNodes) != 0):
+                print("Synopsis: " + synopsis.firstChild.nodeValue) 
+
+            response = ''
+            while(response != 'd' and response != 'b'):
+                if(response != ''):
+                    print("\nInvalid choice")
+                print("\n[d] To download book")
+                print("[b] To go back")
+                response = input("Response: ")
+            if(response != 'b'):
+                self.book_download(id)
+        else:
+            print("Error, server replied with", data.status_code)
+
 
     def login():
         USERID = input("User ID/ Email: ")
@@ -461,11 +489,11 @@ class Bookshare():
             parsedData = minidom.parseString(data.text);
             title = parsedData.getElementsByTagName('title')[0].firstChild.nodeValue
             author = parsedData.getElementsByTagName('author')[0].firstChild.nodeValue
-            synopsis = parsedData.getElementsByTagName('brief-synopsis')[0].firstChild.nodeValue
+            synopsis = parsedData.getElementsByTagName('brief-synopsis')[0]
             print("\nTitle: " + title)
             print("Author: " + author)
-            print("\nBrief Synopsis\n" + synopsis)
-
+            if(len(synopsis.childNodes) != 0):
+                print("Synopsis: " + synopsis.firstChild.nodeValue)
             response = ''
             while(response != 'd' and response != 'b'):
                 if(response != ''):
