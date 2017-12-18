@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, hashlib
 import requests
 from xml.dom import minidom
 from prettytable import PrettyTable
@@ -85,12 +85,26 @@ class SugamyaPustakalya():
             print(e);
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
-            books = parsedData.getElementsByTagName('title')
+            books = parsedData.getElementsByTagName('result')
             if(len(books) == 0):
                 print("No books found")
             else:
+                all_ids = []
+                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    print(book.firstChild.nodeValue)
+                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
+                t.align = "l"
+                print(t)
+                response = ''
+                while(response not in all_ids and response != 'b'):
+                    if(response != ''):
+                        print("\nInvalid choice, try again")
+                    print("\nEnter a book ID to search and download")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -103,12 +117,26 @@ class SugamyaPustakalya():
             print(e)
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
-            books = parsedData.getElementsByTagName('title')
+            books = parsedData.getElementsByTagName('result')
             if(len(books) == 0):
                 print("No books found")
             else:
+                all_ids = []
+                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    print(book.firstChild.nodeValue)
+                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
+                t.align = "l"
+                print(t)
+                response = ''
+                while(response not in all_ids and response != 'b'):
+                    if(response != ''):
+                        print("\nInvalid choice, try again")
+                    print("\nEnter a book ID to search and download")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -125,11 +153,54 @@ class SugamyaPustakalya():
             if(len(categories) == 0):
                 print("No books found")
             else:
+                print("BOOK CATEGORIES")
+                all_categories = []
                 for category in categories:
                     print(category.firstChild.nodeValue)
+                    all_categories.append(category.firstChild.nodeValue)
+                response = ''
+                while(response not in all_categories and response != 'b'):
+                    if(response != ''):
+                        print("Invalid choice, try again")
+                    print("\nEnter a category to search")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.category_search(response)
         else:
             print("Error, server replied with", data.status_code)
 
+    def category_search(self, category_name):
+        # Get books of a particular category
+
+        try:
+            data = requests.get(self.URL + "category/" + category_name + "/page/1/limit/52/format/xml?API_key=" + self.KEY, verify=False)
+        except Exception as e:
+            print(e)
+        if(data.status_code == 200):
+            parsedData = minidom.parseString(data.text);
+            books = parsedData.getElementsByTagName('result')
+            if(len(books) == 0):
+                print("No books found")
+            else:
+                all_ids = []
+                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                for book in books:
+                   t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                   all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
+                t.align = "l"
+                print(t)
+                response = ''
+                while(response not in all_ids and response != 'b'):
+                    if(response != ''):
+                        print("\nInvalid choice, try again")
+                    print("\nEnter a book ID to search and download")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.get_book_id(response)
+        else:
+            print("Error, server replied with", data.status_code)
 
     def search_book(self):
         # Search books by Title/Author from user given user input
@@ -140,12 +211,26 @@ class SugamyaPustakalya():
             print(e)
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
-            books = parsedData.getElementsByTagName('title')
+            books = parsedData.getElementsByTagName('result')
             if(len(books) == 0):
                 print("No books found")
             else:
+                all_ids = []
+                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    print(book.firstChild.nodeValue)
+                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
+                t.align = "l"
+                print(t)
+                response = ''
+                while(response not in all_ids and response != 'b'):
+                    if(response != ''):
+                        print("\nInvalid choice, try again")
+                    print("\nEnter a book ID to search and download")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -177,8 +262,7 @@ class Bookshare():
         print("[2] Popular books")
         print("[3] Search Books")
         print("[4] Book Categories")
-        print("[5] Search and download book by ID")
-        print("[6] Login")
+        print("[5] Login")
         print("[b] Go Back")
         print("[q] Quit")
         
@@ -200,8 +284,6 @@ class Bookshare():
                 self.search_book()
             elif choice == '4':
                 self.get_book_categories()
-            elif choice == '5':
-                self.get_book_id()
             elif choice == 'q':
                 print("\nThanks for using Reader. Bye.")
                 sys.exit(0)
@@ -226,8 +308,8 @@ class Bookshare():
                 all_ids = []
                 t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    t.add_row([book.childNodes[1].firstChild.nodeValue, book.childNodes[5].firstChild.nodeValue, book.childNodes[3].firstChild.nodeValue])
-                    all_ids.append(book.childNodes[1].firstChild.nodeValue)
+                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
                 response = ''
@@ -255,11 +337,22 @@ class Bookshare():
             if(len(books) == 0):
                 print("No books found")
             else:
+                all_ids = []
                 t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    t.add_row([book.childNodes[1].firstChild.nodeValue, book.childNodes[5].firstChild.nodeValue, book.childNodes[3].firstChild.nodeValue])
+                   t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                   all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
+                response = ''
+                while(response not in all_ids and response != 'b'):
+                    if(response != ''):
+                        print("\nInvalid choice, try again")
+                    print("\nEnter a book ID to search and download")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -274,7 +367,7 @@ class Bookshare():
             parsedData = minidom.parseString(data.text);
             categories = parsedData.getElementsByTagName('name')
             if(len(categories) == 0):
-                print("No books found")
+                print("No categories found")
             else:
                 print("BOOK CATEGORIES")
                 all_categories = []
@@ -307,11 +400,22 @@ class Bookshare():
             if(len(books) == 0):
                 print("No books found")
             else:
+                all_ids = []
                 t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    t.add_row([book.childNodes[1].firstChild.nodeValue, book.childNodes[5].firstChild.nodeValue, book.childNodes[3].firstChild.nodeValue])
+                   t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                   all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
+                response = ''
+                while(response not in all_ids and response != 'b'):
+                    if(response != ''):
+                        print("\nInvalid choice, try again")
+                    print("\nEnter a book ID to search and download")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -328,11 +432,22 @@ class Bookshare():
             if(len(books) == 0):
                 print("No books found")
             else:
+                all_ids = []
                 t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    t.add_row([book.childNodes[1].firstChild.nodeValue, book.childNodes[5].firstChild.nodeValue, book.childNodes[3].firstChild.nodeValue])
+                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
+                response = ''
+                while(response not in all_ids and response != 'b'):
+                    if(response != ''):
+                        print("\nInvalid choice, try again")
+                    print("\nEnter a book ID to search and download")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -346,11 +461,9 @@ class Bookshare():
             parsedData = minidom.parseString(data.text);
             title = parsedData.getElementsByTagName('title')[0].firstChild.nodeValue
             author = parsedData.getElementsByTagName('author')[0].firstChild.nodeValue
-            publisher = parsedData.getElementsByTagName('publisher')[0].firstChild.nodeValue
             synopsis = parsedData.getElementsByTagName('brief-synopsis')[0].firstChild.nodeValue
             print("\nTitle: " + title)
             print("Author: " + author)
-            print("Publisher: " + publisher)
             print("\nBrief Synopsis\n" + synopsis)
 
             response = ''
@@ -364,7 +477,16 @@ class Bookshare():
                 self.book_download(id)
         else:
             print("Error, server replied with", data.status_code)
-   
+
+    def book_download(self, id):
+        # Download a book
+        try:
+            m = hashlib.md5.new(self.password).digest()
+            data = requests.get("https://api.bookshare.org/download/content/" + id + "/version/1/for/sidbhakar@gmail.com?api_key=" + self.KEY, verify=False)# during production remove verify = false
+        except Exception as e:
+            print(e)
+        if(data.status_code == 200):       
+            parsedData = minidom.parseString(data.text);
 
     def login():
         USERID = input("User ID/ Email: ")
