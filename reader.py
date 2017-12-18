@@ -1,6 +1,7 @@
 import os, sys
 import requests
 from xml.dom import minidom
+from prettytable import PrettyTable
 
 # Reader is a terminal application that greets old friends warmly,
 #   and remembers new friends.
@@ -36,6 +37,10 @@ class SugamyaPustakalya():
         
     def get_user_choice(self):
         # Let users know what they can do.
+
+        print("\n\t***  SUGAMYA PUSTAKALYA  ***")
+        print("\t**********************************************")
+
         print("\n[1] Latest books")
         print("[2] Popular books")
         print("[3] Search Books")
@@ -161,6 +166,9 @@ class Bookshare():
 
     def get_user_choice(self):
         # Let users know what they can do.
+        print("\n\t***  BOOKSHARE  ***")
+        print("\t**********************************************")
+
         print("\n[1] Latest books")
         print("[2] Popular books")
         print("[3] Search Books")
@@ -204,12 +212,15 @@ class Bookshare():
             print(e);
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
-            books = parsedData.getElementsByTagName('title')
+            books = parsedData.getElementsByTagName('result')
             if(len(books) == 0):
                 print("No books found")
             else:
+                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    print(book.firstChild.nodeValue)
+                    t.add_row([book.childNodes[1].firstChild.nodeValue, book.childNodes[5].firstChild.nodeValue, book.childNodes[3].firstChild.nodeValue])
+                t.align = "l"
+                print(t)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -222,12 +233,15 @@ class Bookshare():
             print(e)
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
-            books = parsedData.getElementsByTagName('title')
+            books = parsedData.getElementsByTagName('result')
             if(len(books) == 0):
                 print("No books found")
             else:
+                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    print(book.firstChild.nodeValue)
+                    t.add_row([book.childNodes[1].firstChild.nodeValue, book.childNodes[5].firstChild.nodeValue, book.childNodes[3].firstChild.nodeValue])
+                t.align = "l"
+                print(t)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -244,11 +258,46 @@ class Bookshare():
             if(len(categories) == 0):
                 print("No books found")
             else:
+                print("BOOK CATEGORIES")
+                all_categories = []
                 for category in categories:
                     print(category.firstChild.nodeValue)
+                    all_categories.append(category.firstChild.nodeValue)
+                response = ''
+                while(response not in all_categories and response != 'b'):
+                    if(response != ''):
+                        print("Invalid choice, try again")
+                    print("\nEnter a category to search")
+                    print("Enter b to go back")
+                    response = input("\nResponse: ")
+                if(response != 'b'):
+                    self.category_search(response)
+
+
         else:
             print("Error, server replied with", data.status_code)
 
+
+    def category_search(self, category_name):
+        # Get books of a particular category
+
+        try:
+            data = requests.get(self.URL + "search/category/" + category_name + "/format/xml?api_key=" + self.KEY, verify=False)
+        except Exception as e:
+            print(e)
+        if(data.status_code == 200):
+            parsedData = minidom.parseString(data.text);
+            books = parsedData.getElementsByTagName('result')
+            if(len(books) == 0):
+                print("No books found")
+            else:
+                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                for book in books:
+                    t.add_row([book.childNodes[1].firstChild.nodeValue, book.childNodes[5].firstChild.nodeValue, book.childNodes[3].firstChild.nodeValue])
+                t.align = "l"
+                print(t)
+        else:
+            print("Error, server replied with", data.status_code)
 
     def search_book(self):
         # Search books by Title/Author from user given user input
@@ -259,12 +308,15 @@ class Bookshare():
             print(e)
         if(data.status_code == 200):       
             parsedData = minidom.parseString(data.text);
-            books = parsedData.getElementsByTagName('title')
+            books = parsedData.getElementsByTagName('result')
             if(len(books) == 0):
                 print("No books found")
             else:
+                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    print(book.firstChild.nodeValue)
+                    t.add_row([book.childNodes[1].firstChild.nodeValue, book.childNodes[5].firstChild.nodeValue, book.childNodes[3].firstChild.nodeValue])
+                t.align = "l"
+                print(t)
         else:
             print("Error, server replied with", data.status_code)
 
