@@ -1,4 +1,4 @@
-import os, sys, hashlib, base64
+import os, sys, hashlib, base64, ftplib
 import requests
 from xml.dom import minidom
 from prettytable import PrettyTable
@@ -68,6 +68,8 @@ class SugamyaPustakalya():
                 self.search_book()
             elif choice == '4':
                 self.get_book_categories()
+            elif choice == '5':
+                self.download_books()
             elif choice == 'q':
                 print("\nThanks for using Reader. Bye.")
                 sys.exit(0)
@@ -258,28 +260,74 @@ class SugamyaPustakalya():
                 print("[b] To go back")
                 response = input("Response: ")
             if(response != 'b'):
-                self.book_download(id)
+                self.book_download_request(id)
         else:
             print("Error, server replied with", data.status_code)
 
-    def book_download(self, id):
+    def book_download_request(self, id):
         # Download a book
         # if(self.userid == '' or self.password == ''):
         #     self.login()
         try:
             authString = "26353" + ':' "9m85twwz"
             encoded = base64.b64encode(bytearray(authString.encode())).decode()
-            headers = {'Authorization': 'Basic ' + encoded, "page" : "1", "limit" : "1", "format" : "xml", "API_key" : self.KEY, "bookId" : id, "formatId" : 1}
+            print(id)
+            headers = {'Authorization': 'Basic ' + encoded, "page" : "1", "limit" : "1", "format" : "xml", "API_key" : self.KEY, "bookId" : id, "formatId" : '6'}
             data = requests.post("https://library.daisyindia.org/NALP/rest/NALPAPIService/raiseBookDownloadRequest", headers = headers, verify=False)
         except Exception as e:
             print(e)
 
         if(data.status_code == 200):
-            parsedData = minidom.parseString(data.text);
-            print(parsedData.toxml())
+            parsedData = minidom.parseString(data.text)
+            message = parsedData.getElementsByTagName('message')[0]
+            print(message.firstChild.nodeValue)
         else:
             print("Error, server replied with", data.status_code) 
 
+    def download_books(self):
+        # download books that are ready for downloading
+        try:
+            authString = "26353" + ':' "9m85twwz"
+            encoded = base64.b64encode(bytearray(authString.encode())).decode()
+            print(id)
+            headers = {'Authorization': 'Basic ' + encoded, "page" : "1", "limit" : "10", "format" : "xml", "API_key" : self.KEY}
+            data = requests.post("https://library.daisyindia.org/NALP/rest/NALPAPIService/fetchUserDownloadRequests", headers = headers, verify=False)
+        except Exception as e:
+            print(e)
+
+        if(data.status_code == 200):
+            parsedData = minidom.parseString(data.text)
+            print(parsedData.toxml())
+            count = 1
+            all_urls = {}
+            books = parsedData.getElementsByTagName('result')
+            t = PrettyTable(['ID', 'TITLE', 'STATUS'])
+            for book in books:
+                status = book.getElementsByTagName('available-to-download')[0].firstChild.nodeValue
+                t.add_row([count, book.getElementsByTagName('title')[0].firstChild.nodeValue, status])
+                if(status == 'Available for Download'):
+                    all_urls[str(count)] = book.getElementsByTagName('downloadUrl')[0].firstChild.nodeValue
+                count += 1
+            t.align = "l"
+            print(t)
+            response = ''
+            while(response not in all_urls and response != 'b'):
+                if(response != ''):
+                    print("\nInvalid choice")
+                print("\nEnter Book ID to download an available book")
+                print("[b] To go back")
+                response = input("Response: ")
+            if(response != 'b'):
+                path = 'Documents/Sugamya_Pustakalya/'
+                filename = 'book'
+
+                ftp = ftplib.FTP(all_urls[response]) 
+                ftp.login("26353", "9m85twwz") 
+                ftp.cwd(path)
+                ftp.retrbinary("RETR " + filename, open(filename, 'wb').write)
+                ftp.quit()
+        else:
+            print("Error, server replied with", data.status_code)
 
     def login(self):
         USERID = input("User ID/ Email: ")
@@ -537,8 +585,6 @@ class Bookshare():
     def login():
         USERID = input("User ID/ Email: ")
         PASSWORD = input("Password: ")
-
-
 
 
 
