@@ -269,13 +269,12 @@ class SugamyaPustakalya():
         try:
             authString = "26353" + ':' "9m85twwz"
             encoded = base64.b64encode(bytearray(authString.encode())).decode()
-            headers = {'Authorization': 'Basic ' + encoded, "page" : "1", "limit" : "1", "format" : "xml", "API_key" : self.KEY, "bookId" : id, "formatId" : "1"}
+            headers = {'Authorization': 'Basic ' + encoded, "page" : "1", "limit" : "1", "format" : "xml", "API_key" : self.KEY, "bookId" : id, "formatId" : 1}
             data = requests.post("https://library.daisyindia.org/NALP/rest/NALPAPIService/raiseBookDownloadRequest", headers = headers, verify=False)
         except Exception as e:
             print(e)
 
         if(data.status_code == 200):
-            print(data.content)
             parsedData = minidom.parseString(data.text);
             print(parsedData.toxml())
         else:
