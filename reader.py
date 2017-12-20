@@ -320,7 +320,7 @@ class SugamyaPustakalya():
             if(response != 'b'):
                 path = '~/Documents/Sugamya_Pustakalya/'
                 filename = 'book'
-#                ftp = ftplib.FTP("library.daisyindia.org") 
+                ftp = ftplib.FTP("library.daisyindia.org") 
                 ftp.login("26353", "9m85twwz") 
                 ftp.cwd(path)
                 ftp.retrbinary("RETR 21/User_26353/Wise & Otherwise-22.zip", open(filename, 'wb').write)
