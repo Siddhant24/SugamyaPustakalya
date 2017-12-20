@@ -1,8 +1,8 @@
-import os, sys, hashlib, base64, ftplib
+import os, sys, hashlib, base64, ftplib, urllib.request
 import requests
 from xml.dom import minidom
 from prettytable import PrettyTable
-
+from contextlib import closing
 # Reader is a terminal application that greets old friends warmly,
 #   and remembers new friends.
 
@@ -318,14 +318,19 @@ class SugamyaPustakalya():
                 print("[b] To go back")
                 response = input("Response: ")
             if(response != 'b'):
-                path = 'Documents/Sugamya_Pustakalya/'
+                path = '~/Documents/Sugamya_Pustakalya/'
                 filename = 'book'
-
-                ftp = ftplib.FTP(all_urls[response]) 
+#                ftp = ftplib.FTP("library.daisyindia.org") 
                 ftp.login("26353", "9m85twwz") 
                 ftp.cwd(path)
-                ftp.retrbinary("RETR " + filename, open(filename, 'wb').write)
+                ftp.retrbinary("RETR 21/User_26353/Wise & Otherwise-22.zip", open(filename, 'wb').write)
                 ftp.quit()
+                # proxy = urllib.request.ProxyHandler({'http': 'proxy22.iitd.ac.in:3128'})
+                # opener = urllib.request.build_opener(proxy)
+                # urllib.request.install_opener(opener)
+                # with closing(urllib.request.urlopen(all_urls[response])) as r:
+                #     with open('file', 'wb') as f:
+                #         shutil.copyfileobj(r, f)
         else:
             print("Error, server replied with", data.status_code)
 
