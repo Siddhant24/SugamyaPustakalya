@@ -317,17 +317,13 @@ class SugamyaPustakalya():
                 print("\nEnter Book ID to download an available book")
                 print("[b] To go back")
                 response = input("Response: ")
-                
+
             if(response != 'b'):
                 path = ''
                 url = all_urls[response].split('/')
                 host = url[2].split(':')[0]
                 port = url[2].split(':')[1]
                 filename = url[4]
-                print(host)
-                print(port)
-                print(filename)
-                print(url[3] + '/' + url[4])
                 ftp = ftplib.FTP(host) 
                 ftp.login("26353", "9m85twwz") 
                 ftp.cwd(path)
