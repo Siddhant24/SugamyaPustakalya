@@ -317,13 +317,21 @@ class SugamyaPustakalya():
                 print("\nEnter Book ID to download an available book")
                 print("[b] To go back")
                 response = input("Response: ")
+                
             if(response != 'b'):
                 path = ''
-                filename = 'book.zip'
-                ftp = ftplib.FTP("library.daisyindia.org") 
+                url = all_urls[response].split('/')
+                host = url[2].split(':')[0]
+                port = url[2].split(':')[1]
+                filename = url[4]
+                print(host)
+                print(port)
+                print(filename)
+                print(url[3] + '/' + url[4])
+                ftp = ftplib.FTP(host) 
                 ftp.login("26353", "9m85twwz") 
                 ftp.cwd(path)
-                ftp.retrbinary("RETR User_26353/Meditation.zip, open(filename, 'wb').write")
+                ftp.retrbinary("RETR " + url[3] + "/" + url[4], open(filename, 'wb').write)
                 ftp.quit()
                 # proxy = urllib.request.ProxyHandler({'http': 'proxy22.iitd.ac.in:3128'})
                 # opener = urllib.request.build_opener(proxy)
