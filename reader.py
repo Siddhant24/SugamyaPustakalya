@@ -318,12 +318,12 @@ class SugamyaPustakalya():
                 print("[b] To go back")
                 response = input("Response: ")
             if(response != 'b'):
-                path = '~/Documents/Sugamya_Pustakalya/'
+                path = ''
                 filename = 'book'
                 ftp = ftplib.FTP("library.daisyindia.org") 
                 ftp.login("26353", "9m85twwz") 
                 ftp.cwd(path)
-                ftp.retrbinary("RETR 21/User_26353/Wise & Otherwise-22.zip", open(filename, 'wb').write)
+                ftp.retrbinary("RETR 21/User_26353/Meditation.zip, open(filename, 'wb').write)
                 ftp.quit()
                 # proxy = urllib.request.ProxyHandler({'http': 'proxy22.iitd.ac.in:3128'})
                 # opener = urllib.request.build_opener(proxy)
