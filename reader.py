@@ -92,9 +92,16 @@ class SugamyaPustakalya():
                 print("No books found")
             else:
                 all_ids = []
-                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                t = PrettyTable(['AUTHOR', 'BRIEF-SYNOPSIS', 'DOWNLOAD-FORMAT','DTBOOK-SIZE', 'FREELY-AVAILABLE', 'ID', 'ISBN13', 'TITLE'])
+                
                 for book in books:
-                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    row=[]
+                    for child in book.childNodes:
+                      if(len(child.childNodes)!=0):
+                        row.append(child.firstChild.nodeValue[:20])
+                      else:
+                        row.append('NA')
+                    t.add_row(row)
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
@@ -124,9 +131,16 @@ class SugamyaPustakalya():
                 print("No books found")
             else:
                 all_ids = []
-                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                t = PrettyTable(['AUTHOR', 'BRIEF-SYNOPSIS', 'DOWNLOAD-FORMAT','DTBOOK-SIZE', 'FREELY-AVAILABLE', 'ID', 'ISBN13', 'TITLE'])
+                
                 for book in books:
-                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    row=[]
+                    for child in book.childNodes:
+                      if(len(child.childNodes)!=0):
+                        row.append(child.firstChild.nodeValue[:20])
+                      else:
+                        row.append('NA')
+                    t.add_row(row)
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
@@ -186,10 +200,17 @@ class SugamyaPustakalya():
                 print("No books found")
             else:
                 all_ids = []
-                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                t = PrettyTable(['AUTHOR', 'BRIEF-SYNOPSIS', 'DOWNLOAD-FORMAT','DTBOOK-SIZE', 'FREELY-AVAILABLE', 'ID', 'ISBN13', 'TITLE'])
+                
                 for book in books:
-                   t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
-                   all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
+                    row=[]
+                    for child in book.childNodes:
+                      if(len(child.childNodes)!=0):
+                        row.append(child.firstChild.nodeValue[:20])
+                      else:
+                        row.append('NA')
+                    t.add_row(row)
+                    all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
                 response = ''
@@ -218,9 +239,16 @@ class SugamyaPustakalya():
                 print("No books found")
             else:
                 all_ids = []
-                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                t = PrettyTable(['AUTHOR', 'BRIEF-SYNOPSIS', 'DTBOOK-SIZE','FREELY-AVAILABLE', 'ID', 'ISBN13', 'PUBLISHER', 'TITLE'])
+                
                 for book in books:
-                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    row=[]
+                    for child in book.childNodes:
+                      if(len(child.childNodes)!=0):
+                        row.append(child.firstChild.nodeValue[:20])
+                      else:
+                        row.append('NA')
+                    t.add_row(row)
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
@@ -409,9 +437,16 @@ class Bookshare():
                 print("No books found")
             else:
                 all_ids = []
-                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                t = PrettyTable(['AUTHOR', 'BRIEF-SYNOPSIS', 'DOWNLOAD-FORMAT','DTBOOK-SIZE', 'FREELY-AVAILABLE', 'ID', 'ISBN13', 'TITLE'])
+                
                 for book in books:
-                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    row=[]
+                    for child in book.childNodes:
+                      if(len(child.childNodes)!=0):
+                        row.append(child.firstChild.nodeValue[:20])
+                      else:
+                        row.append('NA')
+                    t.add_row(row)
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
@@ -441,10 +476,17 @@ class Bookshare():
                 print("No books found")
             else:
                 all_ids = []
-                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                t = PrettyTable(['AUTHOR', 'BRIEF-SYNOPSIS', 'DOWNLOAD-FORMAT','DTBOOK-SIZE', 'FREELY-AVAILABLE', 'ID', 'ISBN13', 'TITLE'])
+                
                 for book in books:
-                   t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
-                   all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
+                    row=[]
+                    for child in book.childNodes:
+                      if(len(child.childNodes)!=0):
+                        row.append(child.firstChild.nodeValue[:20])
+                      else:
+                        row.append('NA')
+                    t.add_row(row)
+                    all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
                 response = ''
@@ -504,10 +546,17 @@ class Bookshare():
                 print("No books found")
             else:
                 all_ids = []
-                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                t = PrettyTable(['AUTHOR', 'BRIEF-SYNOPSIS', 'DOWNLOAD-FORMAT','DTBOOK-SIZE', 'FREELY-AVAILABLE', 'ID', 'ISBN13', 'TITLE'])
+                
                 for book in books:
-                   t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
-                   all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
+                    row=[]
+                    for child in book.childNodes:
+                      if(len(child.childNodes)!=0):
+                        row.append(child.firstChild.nodeValue[:20])
+                      else:
+                        row.append('NA')
+                    t.add_row(row)
+                    all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
                 response = ''
@@ -536,9 +585,16 @@ class Bookshare():
                 print("No books found")
             else:
                 all_ids = []
-                t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
+                t = PrettyTable(['AUTHOR', 'BRIEF-SYNOPSIS', 'DOWNLOAD-FORMAT','DTBOOK-SIZE', 'FREELY-AVAILABLE', 'ID', 'ISBN13', 'TITLE'])
+                
                 for book in books:
-                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    row=[]
+                    for child in book.childNodes:
+                      if(len(child.childNodes)!=0):
+                        row.append(child.firstChild.nodeValue[:20])
+                      else:
+                        row.append('NA')
+                    t.add_row(row)
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
