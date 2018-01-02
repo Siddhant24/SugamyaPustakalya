@@ -1,4 +1,4 @@
-import os, sys, hashlib, base64, ftplib, urllib.request
+import os, sys, hashlib, base64, ftplib, urllib.request, asyncio
 import requests
 from xml.dom import minidom
 from prettytable import PrettyTable
@@ -47,7 +47,7 @@ class SugamyaPustakalya():
             choice = self.get_user_choice()
             self.display_title_bar()
             if choice == '1':
-                self.get_latest_books()
+                self.get_latest_books(1)
             elif choice == '2':
                 self.get_popular_books()
             elif choice == '3':
@@ -64,11 +64,19 @@ class SugamyaPustakalya():
             else:
                 print("\nInvalid choice.\n")
         
+    # async def make_request(self, type, page):
+    #     try:
+    #         return requests.get(self.URL + type + '/page/' + page + '/limit/20/format/JSON?API_key=' + self.KEY, verify=False) # during production remove verify = false
+    #     except Exception as e:
+    #         print(e);
 
-    def get_latest_books(self):
+
+    def get_latest_books(self, page):
         # Get latest books from Sugamya Pustakalya
         try:
-            data = requests.get(self.URL + "latest/page/1/limit/20/format/JSON?API_key=" + self.KEY, verify=False) # during production remove verify = false
+            # loop = asyncio.get_event_loop()
+            # data = loop.run_until_complete(self.make_request('latest', str(page)))
+            data = requests.get(self.URL + 'latest/page/' + str(page) + '/limit/20/format/JSON?API_key=' + self.KEY, verify=False)
         except Exception as e:
             print(e);
         if(data.status_code == 200):       
@@ -92,13 +100,16 @@ class SugamyaPustakalya():
                 t.align = "l"
                 print(t)
                 response = ''
-                while(response not in all_ids and response != 'b'):
+                while(response not in all_ids and response != 'b' and response != 'n'):
                     if(response != ''):
                         print("\nInvalid choice, try again")
                     print("\nEnter a book ID to search and download")
+                    print("\nEnter n to display next page")
                     print("Enter b to go back")
                     response = input("\nResponse: ")
-                if(response != 'b'):
+                if(response  == 'n'):
+                    self.get_latest_books(page + 1)
+                elif(response != 'b'):
                     self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)

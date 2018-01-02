@@ -47,7 +47,7 @@ class Bookshare():
             choice = self.get_user_choice()
             self.display_title_bar()
             if choice == '1':
-                self.get_latest_books()
+                self.get_latest_books(1)
             elif choice == '2':
                 self.get_popular_books()
             elif choice == '3':
@@ -63,10 +63,10 @@ class Bookshare():
                 print("\nInvalid choice.\n")
         
 
-    def get_latest_books(self):
+    def get_latest_books(self, page):
         # Get latest books from bookshare.org
         try:
-            data = requests.get(self.URL + "latest/format/xml?api_key=" + self.KEY, verify=False) # during production remove verify = false
+            data = requests.get(self.URL + "latest/format/xml/page/" + str(page) + "?api_key=" + self.KEY, verify=False) # during production remove verify = false
         except Exception as e:
             print(e);
         if(data.status_code == 200):       
@@ -78,18 +78,21 @@ class Bookshare():
                 all_ids = []
                 t = PrettyTable(['ID', 'AUTHOR', 'TITLE'])
                 for book in books:
-                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue])
+                    t.add_row([book.getElementsByTagName('id')[0].firstChild.nodeValue, book.getElementsByTagName('author')[0].firstChild.nodeValue, book.getElementsByTagName('title')[0].firstChild.nodeValue[:25]])
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
                 response = ''
-                while(response not in all_ids and response != 'b'):
+                while(response not in all_ids and response != 'b' and response != 'n'):
                     if(response != ''):
                         print("\nInvalid choice, try again")
                     print("\nEnter a book ID to search and download")
+                    print("\nEnter n to display next page")
                     print("Enter b to go back")
                     response = input("\nResponse: ")
-                if(response != 'b'):
+                if(response  == 'n'):
+                    self.get_latest_books(page + 1)
+                elif(response != 'b'):
                     self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
