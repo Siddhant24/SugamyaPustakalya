@@ -49,9 +49,9 @@ class SugamyaPustakalya():
             if choice == '1':
                 self.get_latest_books(1)
             elif choice == '2':
-                self.get_popular_books()
+                self.get_popular_books(1)
             elif choice == '3':
-                self.search_book()
+                self.search_book(1)
             elif choice == '4':
                 self.get_book_categories()
             elif choice == '5':
@@ -115,7 +115,7 @@ class SugamyaPustakalya():
             print("Error, server replied with", data.status_code)
 
 
-    def get_popular_books(self):
+    def get_popular_books(self, page):
         # Get popular books from Sugamya Pustakalya
         try:
             data = requests.get(self.URL + "popularbooks/noOfTimesDelivered/1/startDate/2017-01-01/endDate/2017-12-15/page/1/limit/17/format/xml?API_key=" + self.KEY, verify=False) # during production remove verify = false
@@ -142,19 +142,22 @@ class SugamyaPustakalya():
                 t.align = "l"
                 print(t)
                 response = ''
-                while(response not in all_ids and response != 'b'):
+                while(response not in all_ids and response != 'b' and response != 'n'):
                     if(response != ''):
                         print("\nInvalid choice, try again")
                     print("\nEnter a book ID to search and download")
+                    print("\nEnter n to display next page")
                     print("Enter b to go back")
                     response = input("\nResponse: ")
-                if(response != 'b'):
+                if(response  == 'n'):
+                    self.get_latest_books(page + 1)
+                elif(response != 'b'):
                     self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
 
-    def get_book_categories(self):
+    def get_book_categories(self, page):
         # Get popular books from Sugamya Pustakalya
         try:
             data = requests.get(self.URL + "categorylist/page/1/limit/52/format/xml?API_key=" + self.KEY, verify=False) # during production remove verify = false
@@ -172,18 +175,21 @@ class SugamyaPustakalya():
                     print(category.firstChild.nodeValue)
                     all_categories.append(category.firstChild.nodeValue)
                 response = ''
-                while(response not in all_categories and response != 'b'):
+                while(response not in all_ids and response != 'b' and response != 'n'):
                     if(response != ''):
-                        print("Invalid choice, try again")
-                    print("\nEnter a category to search")
+                        print("\nInvalid choice, try again")
+                    print("\nEnter a book ID to search and download")
+                    print("\nEnter n to display next page")
                     print("Enter b to go back")
                     response = input("\nResponse: ")
-                if(response != 'b'):
-                    self.category_search(response)
+                if(response  == 'n'):
+                    self.get_latest_books(page + 1)
+                elif(response != 'b'):
+                    self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
-    def category_search(self, category_name):
+    def category_search(self, category_name, page):
         # Get books of a particular category
 
         try:
@@ -211,18 +217,21 @@ class SugamyaPustakalya():
                 t.align = "l"
                 print(t)
                 response = ''
-                while(response not in all_ids and response != 'b'):
+                while(response not in all_ids and response != 'b' and response != 'n'):
                     if(response != ''):
                         print("\nInvalid choice, try again")
                     print("\nEnter a book ID to search and download")
+                    print("\nEnter n to display next page")
                     print("Enter b to go back")
                     response = input("\nResponse: ")
-                if(response != 'b'):
+                if(response  == 'n'):
+                    self.get_latest_books(page + 1)
+                elif(response != 'b'):
                     self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
 
-    def search_book(self):
+    def search_book(self, page):
         # Search books by Title/Author from user given user input
         search = input("Enter book Title/Author: ")
         try:
@@ -250,13 +259,16 @@ class SugamyaPustakalya():
                 t.align = "l"
                 print(t)
                 response = ''
-                while(response not in all_ids and response != 'b'):
+                while(response not in all_ids and response != 'b' and response != 'n'):
                     if(response != ''):
                         print("\nInvalid choice, try again")
                     print("\nEnter a book ID to search and download")
+                    print("\nEnter n to display next page")
                     print("Enter b to go back")
                     response = input("\nResponse: ")
-                if(response != 'b'):
+                if(response  == 'n'):
+                    self.get_latest_books(page + 1)
+                elif(response != 'b'):
                     self.get_book_id(response)
         else:
             print("Error, server replied with", data.status_code)
@@ -309,7 +321,7 @@ class SugamyaPustakalya():
         else:
             print("Error, server replied with", data.status_code) 
 
-    def download_books(self):
+    def download_books(self,page):
         # download books that are ready for downloading
         try:
             authString = "26353" + ':' "9m85twwz"
