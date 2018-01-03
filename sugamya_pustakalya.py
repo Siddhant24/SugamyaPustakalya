@@ -53,7 +53,7 @@ class SugamyaPustakalya():
             elif choice == '3':
                 self.search_book(1)
             elif choice == '4':
-                self.get_book_categories()
+                self.get_book_categories(1)
             elif choice == '5':
                 self.download_books()
             elif choice == 'q':
@@ -175,7 +175,7 @@ class SugamyaPustakalya():
                     print(category.firstChild.nodeValue)
                     all_categories.append(category.firstChild.nodeValue)
                 response = ''
-                while(response not in all_ids and response != 'b' and response != 'n'):
+                while(response not in all_categories and response != 'b' and response != 'n'):
                     if(response != ''):
                         print("\nInvalid choice, try again")
                     print("\nEnter a book ID to search and download")
@@ -321,7 +321,7 @@ class SugamyaPustakalya():
         else:
             print("Error, server replied with", data.status_code) 
 
-    def download_books(self,page):
+    def download_books(self):
         # download books that are ready for downloading
         try:
             authString = "26353" + ':' "9m85twwz"

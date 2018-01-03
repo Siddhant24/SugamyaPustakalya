@@ -151,7 +151,7 @@ class Bookshare():
                     print(category.firstChild.nodeValue)
                     all_categories.append(category.firstChild.nodeValue)
                 response = ''
-                while(response not in all_ids and response != 'b' and response != 'n'):
+                while(response not in all_categories and response != 'b' and response != 'n'):
                     if(response != ''):
                         print("\nInvalid choice, try again")
                     print("\nEnter a book ID to search and download")
