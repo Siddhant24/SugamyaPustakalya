@@ -221,7 +221,7 @@ class Bookshare():
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
-                respone = ''
+                response = ''
                 while(response not in all_ids and response != 'b' and response != 'n'):
                     if(response != ''):
                         print("\nInvalid choice, try again")
