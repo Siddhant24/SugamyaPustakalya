@@ -95,7 +95,8 @@ class SugamyaPustakalya():
                         row.append(child.firstChild.nodeValue[:20])
                       else:
                         row.append('NA')
-                    t.add_row(row)
+                    if(len(row) == 8):
+                        t.add_row(row)
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
@@ -137,7 +138,8 @@ class SugamyaPustakalya():
                         row.append(child.firstChild.nodeValue[:20])
                       else:
                         row.append('NA')
-                    t.add_row(row)
+                    if(len(row) == 8):
+                        t.add_row(row)
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
@@ -150,7 +152,7 @@ class SugamyaPustakalya():
                     print("Enter b to go back")
                     response = input("\nResponse: ")
                 if(response  == 'n'):
-                    self.get_latest_books(page + 1)
+                    self.get_popular_books(page + 1)
                 elif(response != 'b'):
                     self.get_book_id(response)
         else:
@@ -175,17 +177,14 @@ class SugamyaPustakalya():
                     print(category.firstChild.nodeValue)
                     all_categories.append(category.firstChild.nodeValue)
                 response = ''
-                while(response not in all_categories and response != 'b' and response != 'n'):
+                while(response not in all_categories and response != 'b'):
                     if(response != ''):
                         print("\nInvalid choice, try again")
-                    print("\nEnter a book ID to search and download")
-                    print("\nEnter n to display next page")
+                    print("\nEnter a book category to search")
                     print("Enter b to go back")
                     response = input("\nResponse: ")
-                if(response  == 'n'):
-                    self.get_latest_books(page + 1)
-                elif(response != 'b'):
-                    self.get_book_id(response)
+                if(response != 'b'):
+                    self.category_search(response,1)
         else:
             print("Error, server replied with", data.status_code)
 
@@ -212,7 +211,8 @@ class SugamyaPustakalya():
                         row.append(child.firstChild.nodeValue[:20])
                       else:
                         row.append('NA')
-                    t.add_row(row)
+                    if(len(row) == 8):
+                        t.add_row(row)
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
@@ -254,7 +254,8 @@ class SugamyaPustakalya():
                         row.append(child.firstChild.nodeValue[:20])
                       else:
                         row.append('NA')
-                    t.add_row(row)
+                    if(len(row) == 8):
+                        t.add_row(row)
                     all_ids.append(book.getElementsByTagName('id')[0].firstChild.nodeValue)
                 t.align = "l"
                 print(t)
